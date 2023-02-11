@@ -13,13 +13,22 @@ from models.place import Place
 from models.review import Review
 
 
+def isfloat(arg):
+    """Checks if argument is a float data type variable"""
+    try:
+        float(arg)
+        return True
+    except ValueError:
+        return False
+
+
 def type_parser(arg):
     """Check data type of arg and cast it"""
     if arg.isalpha():
         pass
     elif arg.isdigit():
         arg = int(arg)
-    else:
+    elif isfloat(arg):
         arg = float(arg)
     return arg
 
@@ -69,22 +78,22 @@ class HBNBCommand(cmd.Cmd):
         print()
 
     def do_EOF(self, arg):
-        """EOF(end_of_file) command to exit the interpreter"""
+        """EOF(end_of_file) command to exit the program"""
         print()
         return True
 
     def help_EOF(self):
         """Help output for the EOF command"""
-        print("Exits the interpreter when Ctrl-D(EOF) is entered")
+        print("Exits the program when Ctrl-D(EOF) is entered")
         print()
 
     def do_quit(self, arg):
-        """Quit command to exit the interpreter"""
+        """Quit command to exit the program"""
         return True
 
     def help_quit(self):
         """Help output for the quit command"""
-        print("Exits the interpreter")
+        print("Exits the program")
         print()
 
     def do_create(self, arg):
