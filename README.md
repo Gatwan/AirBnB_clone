@@ -1,12 +1,11 @@
 ![hbnb](https://github.com/Gatwan/AirBnB_clone/blob/master/.img_dir/hbnb.png)
 
 # AirBnB clone
-This project is the first part of the AirBnB clone (HBnB) project
-from foundations year for Holberton School students.
-The main objective of this project is to be an enrichment exerceise
-to improve and applicate the most concepts of higher-level programing
-done before and consists to do an specific command line interpreter
-to manage all of the functions and features of our HBnB.
+This project is the first part of the AirBnB clone (HBnB) project for ALX SE students.
+The main objective of this project is to be an enrichment exercise
+to improve and apply concepts of higher-level programing
+done before and consists of implementing a specific command line interpreter
+to manage all of the functions and features of the project.
 
 ## Requirements of the project
 To do this project we had to learn:
