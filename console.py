@@ -57,7 +57,15 @@ class HBNBCommand(cmd.Cmd):
         if match is not None:
             input_list = [arg[:match.span()[0]], arg[match.span()[1]:]]
             input_list[1] = re.sub('[",]+', '', input_list[1])
-            match = re.search(r"\((.*?)\)", input_list[1])
+            
+            if re.search(r"[\{]", input_list[1]) is not None: # Searches for a dictionary in the input
+                input_list[1] = re.sub(',(?=.*\{)', '', input_list[1], 1) # Only substitutes the first comma in the input
+                input_list[1] = re.sub('["]+', '', input_list[1]) # Substitutes "
+
+                match = re.search(r"\((.*?)\)", input_list[1])
+            else:
+                input_list[1] = re.sub('[",]+', '', input_list[1])
+                match = re.search(r"\((.*?)\)", input_list[1])
 
             if match is not None:
                 cmd_list = [input_list[1][:match.span()[0]],
@@ -207,7 +215,21 @@ class HBNBCommand(cmd.Cmd):
         Updates an instance based on the class name and id by
         adding or updating attribute (save the change into the JSON file)
         """
-        line = arg.split()
+        match = re.search(r"{(.*)}", arg) # Finding the dictionary in the arguments
+        if match is not None:
+            line = arg[:match.span()[0]].split() # Splitting arg upto where the dictionary starts
+            line.append(match.group()) # Adding the dictionary to the list
+            
+            ag = re.sub('[}{\',]', '', line[2])
+            ag = re.sub(':', ' ', ag) #These two lines disassemble the dictionary to just arguments separated by white space
+            
+            ag = ag.split() #forms a list using those arguments
+            it = iter(ag)
+            ag = dict(zip(it, it)) #These two lines make the list a dictionary
+
+            line[2] = ag #reinitializing the dictionary
+        else:
+            line = arg.split()
         if len(line) == 0:
             print("** class name missing **")
         else:
@@ -223,8 +245,15 @@ class HBNBCommand(cmd.Cmd):
                         check = True
                         if len(line) == 2:
                             print("** attribute name missing **")
-                        elif len(line) == 3:
-                            print("** value missing **")
+                        elif len(line) == 3: # An argument list with a dictionary has a length of 3
+                            dict_inst = line[2] # Converting string to dictionary
+                            if isinstance(dict_inst, dict): # Checking if it is a dictionary
+                                for input_key, input_val in dict_inst.items():
+                                    input_value = type_parser(input_val)
+                                    setattr(value, input_key, input_value)
+                                    storage.save()
+                            else:
+                                print("** value missing **")
                         else:
                             line[3] = type_parser(line[3])
                             setattr(value, line[2], line[3])
